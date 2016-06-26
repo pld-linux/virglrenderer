@@ -1,0 +1,10 @@
+--- virglrenderer-0.5.0/src/Makefile.am.orig	2016-03-08 00:34:21.000000000 +0100
++++ virglrenderer-0.5.0/src/Makefile.am	2016-06-26 07:43:06.503671528 +0200
+@@ -2,6 +2,7 @@
+ AM_LDFLAGS = -lm \
+ 	$(GBM_LIBS) \
+ 	$(EPOXY_LIBS) \
++	$(LIBDRM_LIBS) \
+ 	$(CODE_COVERAGE_LDFLAGS)
+ 
+ AM_CFLAGS = \
