@@ -5,12 +5,12 @@
 Summary:	VirGL virtual OpenGL renderer library
 Summary(pl.UTF-8):	VirGL - biblioteka wirtualnego renderera OpenGL
 Name:		virglrenderer
-Version:	0.5.0
+Version:	0.6.0
 Release:	1
 License:	MIT
 Group:		Libraries
 Source0:	https://www.freedesktop.org/software/virgl/%{name}-%{version}.tar.bz2
-# Source0-md5:	29804ecd1713e298828f9d1642eb289d
+# Source0-md5:	3afe7895e87a32cda9789ea34298253a
 Patch0:		%{name}-link.patch
 URL:		https://virgil3d.github.io/
 BuildRequires:	autoconf >= 2.60
