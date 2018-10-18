@@ -21,6 +21,7 @@ BuildRequires:	libepoxy-devel
 BuildRequires:	libtool >= 2:2
 BuildRequires:	pkgconfig
 BuildRequires:	python >= 2
+BuildRequires:	xorg-lib-libX11-devel
 Requires:	libdrm >= 2.4.50
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
