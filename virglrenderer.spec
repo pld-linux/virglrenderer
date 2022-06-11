@@ -1,3 +1,4 @@
+# TODO: optional percetto>=0.0.8 or vperfetto_min for tracing
 #
 # Conditional build:
 %bcond_without	static_libs	# static library
@@ -5,24 +6,27 @@
 Summary:	VirGL virtual OpenGL renderer library
 Summary(pl.UTF-8):	VirGL - biblioteka wirtualnego renderera OpenGL
 Name:		virglrenderer
-Version:	0.7.0
+Version:	0.9.1
 Release:	1
 License:	MIT
 Group:		Libraries
-Source0:	https://www.freedesktop.org/software/virgl/%{name}-%{version}.tar.bz2
-# Source0-md5:	f46ff65025c869c0ae86ba337cc699c2
-Patch0:		%{name}-link.patch
+#Source0Download: https://gitlab.freedesktop.org/virgl/virglrenderer/-/tags
+Source0:	https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/%{version}/%{name}-%{version}.tar.bz2
+# Source0-md5:	0918da613ff02a8c1c34041d81144e5f
 URL:		https://virgil3d.github.io/
-BuildRequires:	autoconf >= 2.60
-BuildRequires:	automake
+BuildRequires:	Mesa-libgbm-devel
 BuildRequires:	check-devel >= 0.9.4
 BuildRequires:	libdrm-devel >= 2.4.50
-BuildRequires:	libepoxy-devel
-BuildRequires:	libtool >= 2:2
+BuildRequires:	libepoxy-devel >= 1.5.4
+BuildRequires:	meson >= 0.46
+BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
 BuildRequires:	python >= 2
+BuildRequires:	rpmbuild(macros) >= 1.736
+BuildRequires:	sed >= 4.0
 BuildRequires:	xorg-lib-libX11-devel
 Requires:	libdrm >= 2.4.50
+Requires:	libepoxy >= 1.5.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -57,27 +61,21 @@ Statyczna biblioteka virglrenderer.
 
 %prep
 %setup -q
-%patch0 -p1
+
+%if %{with static_libs}
+%{__sed} -i -e '/^libvirglrenderer = / s/shared_library/library/' src/meson.build
+%endif
 
 %build
-%{__libtoolize}
-%{__aclocal} -I build-aux
-%{__autoconf}
-%{__autoheader}
-%{__automake}
-%configure \
-	--disable-silent-rules \
-	%{?with_static_libs:--enable-static}
-%{__make}
+%meson build \
+	%{!?with_static_libs:--default-library=shared}
+
+%ninja_build -C build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
-
-# obsoleted by pkg-config
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/libvirglrenderer.la
+%ninja_install -C build
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -87,7 +85,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING
 %attr(755,root,root) %{_bindir}/virgl_test_server
 %attr(755,root,root) %{_libdir}/libvirglrenderer.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libvirglrenderer.so.0
+%attr(755,root,root) %ghost %{_libdir}/libvirglrenderer.so.1
 
 %files devel
 %defattr(644,root,root,755)
