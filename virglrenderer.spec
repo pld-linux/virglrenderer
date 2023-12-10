@@ -21,7 +21,7 @@ BuildRequires:	libepoxy-devel >= 1.5.4
 BuildRequires:	meson >= 0.46
 BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
-BuildRequires:	python >= 2
+BuildRequires:	python3
 BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	sed >= 4.0
 BuildRequires:	xorg-lib-libX11-devel
