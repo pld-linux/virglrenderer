@@ -1,4 +1,6 @@
-# TODO: optional percetto>=0.0.8 or vperfetto_min for tracing
+# TODO: optional percetto>=0.0.8 or vperfetto_min or sysprof>=3.38.0 for tracing
+# venus renderer? (-Dvenus=true, BR: libgbm, libvulkan, opt. libminijail)
+# video support? (-Dvideo=true, BR: libva, libva-drm)
 #
 # Conditional build:
 %bcond_without	static_libs	# static library
@@ -6,19 +8,19 @@
 Summary:	VirGL virtual OpenGL renderer library
 Summary(pl.UTF-8):	VirGL - biblioteka wirtualnego renderera OpenGL
 Name:		virglrenderer
-Version:	0.9.1
+Version:	1.0.1
 Release:	1
 License:	MIT
 Group:		Libraries
 #Source0Download: https://gitlab.freedesktop.org/virgl/virglrenderer/-/tags
 Source0:	https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/%{version}/%{name}-%{version}.tar.bz2
-# Source0-md5:	0918da613ff02a8c1c34041d81144e5f
+# Source0-md5:	c3d2785352a8e612858017d61377b74d
 URL:		https://virgil3d.github.io/
 BuildRequires:	Mesa-libgbm-devel
 BuildRequires:	check-devel >= 0.9.4
 BuildRequires:	libdrm-devel >= 2.4.50
 BuildRequires:	libepoxy-devel >= 1.5.4
-BuildRequires:	meson >= 0.46
+BuildRequires:	meson >= 0.55
 BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
 BuildRequires:	python3
