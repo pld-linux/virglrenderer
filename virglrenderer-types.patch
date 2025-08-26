@@ -1,0 +1,92 @@
+--- virglrenderer-1.1.1/src/drm/amdgpu/amdgpu_renderer.c.orig	2025-04-02 14:24:35.000000000 +0200
++++ virglrenderer-1.1.1/src/drm/amdgpu/amdgpu_renderer.c	2025-08-26 06:20:36.831641271 +0200
+@@ -376,7 +376,7 @@ amdgpu_renderer_get_blob(struct virgl_co
+ 
+    /* If GEM_NEW fails, we can end up here without a backing obj or if it's a dumb buffer. */
+    if (!obj) {
+-      print(0, "No object with blob_id=%ld", blob_id);
++      print(0, "No object with blob_id=%" PRId64, blob_id);
+       return -ENOENT;
+    }
+ 
+@@ -389,7 +389,7 @@ amdgpu_renderer_get_blob(struct virgl_co
+     * to the same storage.
+     */
+    if (obj->exported) {
+-      print(0, "Already exported! blob_id:%ld", blob_id);
++      print(0, "Already exported! blob_id:%" PRId64, blob_id);
+       return -EINVAL;
+    }
+ 
+@@ -401,7 +401,7 @@ amdgpu_renderer_get_blob(struct virgl_co
+       ret = amdgpu_bo_export(obj->bo, amdgpu_bo_handle_type_dma_buf_fd, (uint32_t *)&fd);
+ 
+       if (ret) {
+-         print(0, "Export to fd failed for blob_id:%ld r=%d (%s)", blob_id, ret, strerror(errno));
++         print(0, "Export to fd failed for blob_id:%" PRId64 " r=%d (%s)", blob_id, ret, strerror(errno));
+          return ret;
+       }
+ 
+@@ -480,7 +480,7 @@ amdgpu_ccmd_gem_new(struct drm_context *
+       goto alloc_failed;
+    }
+    if (!drm_context_blob_id_valid(dctx, req->blob_id)) {
+-      print(0, "Invalid blob_id %ld", req->blob_id);
++      print(0, "Invalid blob_id %" PRId64, req->blob_id);
+       ret = -EINVAL;
+       goto alloc_failed;
+    }
+@@ -518,7 +518,7 @@ amdgpu_ccmd_gem_new(struct drm_context *
+ 
+    drm_context_object_set_blob_id(dctx, &obj->base, req->blob_id);
+ 
+-   print(2, "new object blob_id: %ld heap: %08x flags: %lx size: %ld",
++   print(2, "new object blob_id: %" PRId64 " heap: %08x flags: %" PRIx64 " size: %" PRId64,
+          req->blob_id, req->r.preferred_heap, req->r.flags, req->r.alloc_size);
+ 
+    return 0;
+@@ -527,7 +527,7 @@ va_map_failed:
+    amdgpu_bo_free(bo_handle);
+ 
+ alloc_failed:
+-   print(2, "ERROR blob_id: %ld heap: %08x flags: %lx",
++   print(2, "ERROR blob_id: %" PRId64 " heap: %08x flags: %" PRIx64,
+          req->blob_id, req->r.preferred_heap, req->r.flags);
+    if (ctx->shmem)
+       ctx->shmem->async_error++;
+@@ -558,7 +558,7 @@ amdgpu_ccmd_bo_va_op(struct drm_context
+    } else {
+       obj = amdgpu_get_object_from_res_id(ctx, req->res_id, __FUNCTION__);
+       if (!obj) {
+-         print(0, "amdgpu_bo_va_op_raw failed: op: %d res_id: %d offset: 0x%lx size: 0x%lx va: %" PRIx64 " r=%d",
++         print(0, "amdgpu_bo_va_op_raw failed: op: %d res_id: %d offset: 0x%" PRIx64 " size: 0x%" PRIx64 " va: %" PRIx64 " r=%d",
+             req->op, obj->base.res_id, req->offset, req->vm_map_size, req->va, rsp->ret);
+ 
+          /* This is ok. This means the guest closed the GEM already. */
+@@ -574,7 +574,7 @@ amdgpu_ccmd_bo_va_op(struct drm_context
+       if (ctx->shmem)
+          ctx->shmem->async_error++;
+ 
+-      print(0, "amdgpu_bo_va_op_raw failed: op: %d res_id: %d offset: 0x%lx size: 0x%lx va: %" PRIx64 " r=%d",
++      print(0, "amdgpu_bo_va_op_raw failed: op: %d res_id: %d offset: 0x%" PRIx64 " size: 0x%" PRIx64 " va: %" PRIx64 " r=%d",
+          req->op, req->res_id, req->offset, req->vm_map_size, req->va, rsp->ret);
+    } else {
+       print(2, "va_op %d res_id: %u va: [0x%" PRIx64 ", 0x%" PRIx64 "] @offset 0x%" PRIx64,
+@@ -1008,7 +1008,7 @@ amdgpu_ccmd_cs_submit(struct drm_context
+ 
+    drmSyncobjDestroy(amdgpu_device_get_fd(ctx->dev), syncobj_out.handle);
+ 
+-   print(3, "ctx: %d -> seqno={v=%d a=%ld} r=%d", req->ctx_id, hdr->seqno, seqno, r);
++   print(3, "ctx: %d -> seqno={v=%d a=%" PRId64 "} r=%d", req->ctx_id, hdr->seqno, seqno, r);
+ 
+ end:
+    if (bo_list)
+@@ -1135,7 +1135,7 @@ amdgpu_renderer_submit_fence(struct virg
+       return 0;
+    }
+ 
+-   print(3, "ring_idx: %d fence_id: %lu", ring_idx, fence_id);
++   print(3, "ring_idx: %d fence_id: %" PRIu64, ring_idx, fence_id);
+    return drm_timeline_submit_fence(&ctx->timelines[ring_idx - 1], flags, fence_id);
+ }
+ 
