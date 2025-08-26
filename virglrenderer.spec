@@ -24,7 +24,7 @@ BuildRequires:	meson >= 0.55
 BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
 BuildRequires:	python3
-BuildRequires:	rpmbuild(macros) >= 1.736
+BuildRequires:	rpmbuild(macros) >= 2.042
 BuildRequires:	sed >= 4.0
 BuildRequires:	xorg-lib-libX11-devel
 Requires:	libdrm >= 2.4.50
